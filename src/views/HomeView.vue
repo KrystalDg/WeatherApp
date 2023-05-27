@@ -30,7 +30,7 @@
         </template>
       </ul>
     </div>
-    <div class="flex flex-col gap-4">
+    <!-- <div class="flex flex-col gap-4">
       <Suspense>
         <city-list />
         <template #fallback>
@@ -39,6 +39,14 @@
           </div>
         </template>
       </Suspense>
+    </div> -->
+    <div class="flex flex-col gap-4">
+      <suspense>
+        <city-list />
+        <template #fallback>
+          <city-card-skeleton />
+        </template>
+      </suspense>
     </div>
   </main>
 </template>
@@ -48,6 +56,7 @@ import { ref } from "vue";
 import { useRouter } from "vue-router";
 import axios from "axios";
 import CityList from "../components/CityList.vue";
+import CityCardSkeleton from "../components/CityCardSkeleton.vue";
 
 const router = useRouter();
 

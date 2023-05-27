@@ -28,11 +28,11 @@
         }}
       </p>
       <p class="text-8xl mb-8">
-        {{ Math.round(weatherData.current.temp) }}&deg;
+        {{ Math.round(weatherData.current.temp) }}&degC
       </p>
       <p>
         Feels like
-        {{ Math.round(weatherData.current.feels_like) }} &deg;
+        {{ Math.round(weatherData.current.feels_like) }} &degC
       </p>
       <p class="capitalize">
         {{ weatherData.current.weather[0].description }}
@@ -67,7 +67,7 @@
               :src="`http://openweathermap.org/img/wn/${hourData.weather[0].icon}@2x.png`"
               alt=""
             />
-            <p class="text-xl">{{ Math.round(hourData.temp) }}&deg;</p>
+            <p class="text-xl">{{ Math.round(hourData.temp) }}&degC</p>
           </div>
         </div>
       </div>
@@ -97,8 +97,8 @@
             alt=""
           />
           <div class="flex gap-2 flex-1 justify-end">
-            <p>H: {{ Math.round(day.temp.max) }}</p>
-            <p>L: {{ Math.round(day.temp.min) }}</p>
+            <p>H: {{ Math.round(day.temp.max) }}&degC</p>
+            <p>L: {{ Math.round(day.temp.min) }}&degC</p>
           </div>
         </div>
       </div>
@@ -124,7 +124,7 @@ const router = useRouter();
 const getWeatherData = async () => {
   try {
     const weatherData = await axios.get(
-      `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lon}&exclude={part}&appid=7efa332cf48aeb9d2d391a51027f1a71&units=imperial`
+      `https://api.openweathermap.org/data/2.5/onecall?lat=${route.query.lat}&lon=${route.query.lon}&exclude={part}&appid=7efa332cf48aeb9d2d391a51027f1a71&units=metric`
     );
 
     // cal current date & time
@@ -137,6 +137,11 @@ const getWeatherData = async () => {
     weatherData.data.hourly.forEach((hour) => {
       const utc = hour.dt * 1000 + localOffset;
       hour.currentTime = utc + 1000 * weatherData.data.timezone_offset;
+    });
+
+    //Flicker Delay
+    await new Promise((res) => {
+      setTimeout(res, 1000);
     });
 
     return weatherData.data;

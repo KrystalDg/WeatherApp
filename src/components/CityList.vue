@@ -24,12 +24,18 @@ const getCities = async () => {
   const request = [];
   savedCities.value.forEach((city) => {
     const cityData = axios.get(
-      `https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lon}&appid=7efa332cf48aeb9d2d391a51027f1a71&units=imperial`
+      `https://api.openweathermap.org/data/2.5/weather?lat=${city.coords.lat}&lon=${city.coords.lon}&appid=7efa332cf48aeb9d2d391a51027f1a71&&units=metric`
     );
     request.push(cityData);
   });
 
   const weatherData = await Promise.all(request);
+
+  //Flicker Delay
+  await new Promise((res) => {
+    setTimeout(res, 1000);
+  });
+
   weatherData.forEach((value, index) => {
     savedCities.value[index].weather = value.data;
   });
